@@ -17,7 +17,14 @@ load_dotenv()
 logger = logging.getLogger(__name__)
 router = Router()
 
+import re
+
 WEBAPP_URL = settings.WEBAPP_URL
+
+# Telegram requires HTTPS for Web App buttons — validate the URL
+_IS_VALID_WEBAPP_URL = bool(
+    WEBAPP_URL and re.match(r"^https://", WEBAPP_URL)
+)
 
 
 @router.message(Command("start"))
@@ -38,16 +45,26 @@ async def cmd_start(message: Message):
             db.add(user)
             await db.commit()
 
-    kb = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="Открыть ТРУД", web_app=WebAppInfo(url=WEBAPP_URL))]
-    ])
-
-    await message.answer(
-        f"Добро пожаловать в <b>ТРУД</b>!\n\n"
-        f"Здесь ты можешь управлять рецептами, сменами и чек-листами.\n\n"
-        f"Нажми кнопку ниже, чтобы открыть приложение:",
-        reply_markup=kb,
-    )
+    if _IS_VALID_WEBAPP_URL:
+        kb = InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text="Открыть ТРУД", web_app=WebAppInfo(url=WEBAPP_URL))]
+        ])
+        await message.answer(
+            f"Добро пожаловать в <b>ТРУД</b>!\n\n"
+            f"Здесь ты можешь управлять рецептами, сменами и чек-листами.\n\n"
+            f"Нажми кнопку ниже, чтобы открыть приложение:",
+            reply_markup=kb,
+        )
+    else:
+        await message.answer(
+            f"Добро пожаловать в <b>ТРУД</b>!\n\n"
+            f"Веб-приложение пока недоступно. Используй команды:\n"
+            f"/trtemp — лог температуры\n"
+            f"/shift — смена на сегодня\n"
+            f"/checklist — чек-листы\n"
+            f"/remind — напоминание\n"
+            f"/help — справка"
+        )
 
 
 @router.message(Command("help"))
