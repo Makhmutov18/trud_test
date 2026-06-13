@@ -1,20 +1,27 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
 :root {
-  --bg: #FDFBF7;
-  --bg-secondary: #F5F2EB;
-  --primary: #5C6E58;
-  --primary-dark: #4d5e49;
-  --text: #70655B;
-  --text-dark: #2C2520;
-  --text-light: #8C7A6B;
-  --success: #5C6E58;
-  --warning: #D9A06F;
-  --error: #E53E3E;
-  --border: #e8e2d6;
+  /* Colors */
+  --linen: #FDFBF7;
+  --sand: #F5F2EB;
+  --border: #EAE4DC;
+  --coffee: #2C2520;
+  --earth: #70655B;
+  --clay: #8C7A6B;
+  --olive: #5C6E58;
+  --slate: #7B8B9A;
+  --mustard: #D9A06F;
+  --red: #E53E3E;
+  --black: #000000;
+  --white: #FFFFFF;
+
+  /* Typography */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* Radius */
+  --radius-sm: 12px;
   --radius: 16px;
-  --shadow: 0 2px 16px rgba(44, 37, 32, 0.06);
-  --shadow-strong: 0 8px 32px rgba(44, 37, 32, 0.12);
+  --radius-lg: 24px;
 }
 
 * {
@@ -23,184 +30,265 @@
   box-sizing: border-box;
 }
 
-body {
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
-  background: var(--bg);
-  color: var(--text-dark);
-  -webkit-font-smoothing: antialiased;
-  padding-bottom: 80px;
+html {
+  -webkit-tap-highlight-color: transparent;
 }
 
+body {
+  font-family: var(--font-sans);
+  background: var(--linen);
+  color: var(--coffee);
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;
+}
+
+/* ── Layout ── */
 .app-content {
-  padding: 16px;
   max-width: 600px;
   margin: 0 auto;
+  padding: 16px 20px;
+  padding-bottom: 100px;
 }
 
-h1 {
-  font-size: 24px;
+/* ── Constructivist Logo ── */
+.logo-t { color: var(--slate); }
+.logo-r { color: var(--mustard); }
+.logo-u { color: var(--red); }
+.logo-d { color: var(--black); }
+
+/* ── Typography ── */
+.text-display {
+  font-size: clamp(2rem, 5vw, 2.75rem);
+  line-height: 1.1;
+  font-weight: 900;
+}
+.text-heading {
+  font-size: clamp(1.25rem, 3vw, 1.75rem);
+  line-height: 1.2;
   font-weight: 700;
-  color: var(--text-dark);
-  margin-bottom: 16px;
 }
-
-h2 {
-  font-size: 18px;
+.text-subheading {
+  font-size: clamp(1rem, 2.5vw, 1.25rem);
+  line-height: 1.3;
   font-weight: 600;
-  color: var(--text-dark);
-  margin-bottom: 12px;
+}
+.text-body {
+  font-size: clamp(0.875rem, 2vw, 1rem);
+  line-height: 1.5;
+}
+.text-caption {
+  font-size: clamp(0.75rem, 1.5vw, 0.875rem);
+  line-height: 1.4;
 }
 
+/* ── Card ── */
 .card {
-  background: white;
+  background: var(--white);
   border-radius: var(--radius);
-  padding: 16px;
-  box-shadow: var(--shadow);
-  margin-bottom: 12px;
+  border: 1px solid var(--border);
+  padding: 20px;
+  transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+.card-hover {
+  cursor: pointer;
+}
+.card-hover:hover {
+  border-color: var(--clay);
+  opacity: 0.9;
+}
+.card-hover:active {
+  background: var(--sand);
 }
 
+/* ── Button ── */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 12px 20px;
+  padding: 14px 24px;
   border-radius: var(--radius);
-  border: none;
+  border: 1px solid var(--border);
+  background: var(--white);
+  color: var(--coffee);
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+  text-decoration: none;
 }
-
+.btn:hover {
+  background: var(--sand);
+}
+.btn:active {
+  transform: scale(0.98);
+}
 .btn-primary {
-  background: var(--primary);
-  color: white;
+  background: var(--olive);
+  color: var(--linen);
+  border-color: var(--olive);
 }
-
 .btn-primary:hover {
-  background: var(--primary-dark);
+  background: color-mix(in srgb, var(--olive) 90%, white);
 }
 
-.btn-secondary {
-  background: var(--bg-secondary);
-  color: var(--text-dark);
-}
-
-.btn-small {
-  padding: 8px 14px;
-  font-size: 12px;
-}
-
+/* ── Input ── */
 .input {
   width: 100%;
-  padding: 12px 14px;
+  padding: 16px;
+  border-radius: var(--radius);
   border: 1px solid var(--border);
-  border-radius: 10px;
+  background: var(--white);
+  color: var(--coffee);
   font-size: 14px;
-  background: white;
-  color: var(--text-dark);
+  font-family: var(--font-sans);
   outline: none;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
-
+.input::placeholder {
+  color: var(--clay);
+  opacity: 0.6;
+}
 .input:focus {
-  border-color: var(--primary);
+  border-color: var(--coffee);
 }
 
-.badge {
+/* ── Chip / Tag ── */
+.chip {
   display: inline-block;
-  padding: 4px 10px;
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  font-size: 14px;
+  font-weight: 500;
+  background: var(--white);
+  color: var(--earth);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+  white-space: nowrap;
+}
+.chip:hover {
+  border-color: var(--clay);
+}
+.chip-active {
+  background: var(--coffee);
+  color: var(--linen);
+  border-color: var(--coffee);
 }
 
-.badge-success {
-  background: #E8F5E9;
-  color: #2E7D32;
+/* ── Modal ── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: rgba(44, 37, 32, 0.2);
+  padding-bottom: 64px;
+}
+.modal-sheet {
+  width: 100%;
+  max-width: 600px;
+  max-height: 88vh;
+  overflow-y: auto;
+  border-radius: 24px 24px 0 0;
+  border: 1px solid var(--border);
+  border-bottom: none;
+  background: var(--linen);
+  padding: 24px 24px 40px;
 }
 
-.badge-warning {
-  background: #FFF8E1;
-  color: #F57F17;
+/* ── Toggle ── */
+.toggle-track {
+  display: inline-flex;
+  width: 44px;
+  height: 24px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  padding: 2px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+  background: var(--white);
+}
+.toggle-track-on {
+  background: var(--olive);
+  border-color: var(--olive);
+}
+.toggle-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  transition: transform 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+.toggle-thumb-on {
+  transform: translateX(20px);
 }
 
-.badge-error {
-  background: #FFEBEE;
-  color: #C62828;
+/* ── Brew Dot ── */
+.brew-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
 }
 
+/* ── Grid ── */
 .grid-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  gap: 16px;
 }
 
-.tag {
-  display: inline-block;
-  padding: 4px 10px;
-  border-radius: 8px;
-  font-size: 12px;
-  background: var(--bg-secondary);
-  color: var(--text);
-}
-
+/* ── Empty State ── */
 .empty-state {
   text-align: center;
-  padding: 40px 20px;
-  color: var(--text);
-}
-
-.empty-state p {
-  margin-top: 8px;
+  padding: 64px 20px;
+  color: var(--earth);
   font-size: 14px;
+  font-weight: 500;
 }
 
-/* Constructivist logo colors */
-.logo-t { color: #7B8B9A; }
-.logo-r { color: #D9A06F; }
-.logo-u { color: #E53E3E; }
-.logo-d { color: #000000; }
+/* ── Scrollbar ── */
+.scrollbar-none::-webkit-scrollbar { display: none; }
+.scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
 
-/* Bottom navigation */
+/* ── Bottom Navigation ── */
 .bottom-nav {
   position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: #FDFBF7;
-  border-top: none;
-  box-shadow: 0 -2px 20px rgba(44, 37, 32, 0.06);
+  bottom: 16px;
+  left: 16px;
+  right: 16px;
+  z-index: 100;
+  max-width: 600px;
+  margin: 0 auto;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: rgba(253, 251, 247, 0.8);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  padding: 6px 8px;
   display: flex;
   justify-content: space-around;
-  padding: 8px 0;
-  padding-bottom: max(8px, env(safe-area-inset-bottom));
-  z-index: 100;
 }
-
 .nav-item {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 2px;
+  padding: 8px 20px;
+  border-radius: var(--radius-sm);
   text-decoration: none;
-  color: #70655B;
-  padding: 4px 12px;
-  border-radius: 12px;
-  transition: all 0.2s;
-}
-
-.nav-item.active {
-  color: #5C6E58;
-  background: rgba(92, 110, 88, 0.1);
-}
-
-.nav-icon {
-  font-size: 20px;
-}
-
-.nav-label {
-  font-size: 11px;
+  color: var(--clay);
+  font-size: 12px;
   font-weight: 600;
+  transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+.nav-item:hover {
+  color: var(--coffee);
+}
+.nav-item.active {
+  color: var(--olive);
+  background: rgba(92, 110, 88, 0.1);
 }

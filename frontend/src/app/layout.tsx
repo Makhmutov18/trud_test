@@ -14,12 +14,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Constructivist Header */}
         <header className="mb-6 flex flex-col items-center pt-4">
           <div className="flex items-baseline gap-0.5">
-            <span className="text-[2.75rem] font-black leading-none tracking-[-0.08em] logo-t">Т</span>
-            <span className="text-[2.75rem] font-black leading-none tracking-[-0.08em] logo-r">Р</span>
-            <span className="text-[2.75rem] font-black leading-none tracking-[-0.08em] logo-u">У</span>
-            <span className="text-[2.75rem] font-black leading-none tracking-[-0.08em] logo-d">Д</span>
+            <span className="text-display logo-t tracking-[-0.08em]">Т</span>
+            <span className="text-display logo-r tracking-[-0.08em]">Р</span>
+            <span className="text-display logo-u tracking-[-0.08em]">У</span>
+            <span className="text-display logo-d tracking-[-0.08em]">Д</span>
           </div>
-          <p className="mt-1 text-xs font-medium uppercase tracking-[0.2em] text-[#70655B]">
+          <p className="mt-1 text-caption font-medium uppercase tracking-[0.2em] text-[#70655B]">
             Кофейное пространство
           </p>
         </header>
