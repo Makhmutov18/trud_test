@@ -1,16 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
 :root {
-  --bg: #FFF8F0;
-  --bg-secondary: #F5E6D3;
-  --primary: #D4A574;
-  --primary-dark: #C4956A;
-  --text: #8B7355;
-  --text-dark: #5C4A33;
-  --success: #8BC34A;
-  --warning: #FFC107;
-  --error: #EF5350;
-  --border: #E8D5C0;
-  --radius: 14px;
-  --shadow: 0 2px 12px rgba(139, 115, 85, 0.08);
+  --bg: #FDFBF7;
+  --bg-secondary: #F5F2EB;
+  --primary: #5C6E58;
+  --primary-dark: #4d5e49;
+  --text: #70655B;
+  --text-dark: #2C2520;
+  --text-light: #8C7A6B;
+  --success: #5C6E58;
+  --warning: #D9A06F;
+  --error: #E53E3E;
+  --border: #e8e2d6;
+  --radius: 16px;
+  --shadow: 0 2px 16px rgba(44, 37, 32, 0.06);
+  --shadow-strong: 0 8px 32px rgba(44, 37, 32, 0.12);
 }
 
 * {
@@ -53,7 +57,6 @@ h2 {
   padding: 16px;
   box-shadow: var(--shadow);
   margin-bottom: 12px;
-  border: 1px solid var(--border);
 }
 
 .btn {
@@ -152,4 +155,52 @@ h2 {
 .empty-state p {
   margin-top: 8px;
   font-size: 14px;
+}
+
+/* Constructivist logo colors */
+.logo-t { color: #7B8B9A; }
+.logo-r { color: #D9A06F; }
+.logo-u { color: #E53E3E; }
+.logo-d { color: #000000; }
+
+/* Bottom navigation */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #FDFBF7;
+  border-top: none;
+  box-shadow: 0 -2px 20px rgba(44, 37, 32, 0.06);
+  display: flex;
+  justify-content: space-around;
+  padding: 8px 0;
+  padding-bottom: max(8px, env(safe-area-inset-bottom));
+  z-index: 100;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  text-decoration: none;
+  color: #70655B;
+  padding: 4px 12px;
+  border-radius: 12px;
+  transition: all 0.2s;
+}
+
+.nav-item.active {
+  color: #5C6E58;
+  background: rgba(92, 110, 88, 0.1);
+}
+
+.nav-icon {
+  font-size: 20px;
+}
+
+.nav-label {
+  font-size: 11px;
+  font-weight: 600;
 }
