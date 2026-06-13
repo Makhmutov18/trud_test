@@ -3,9 +3,12 @@ import logging
 import os
 
 from contextlib import asynccontextmanager
+from pathlib import Path
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse, Response
+from fastapi.staticfiles import StaticFiles
 
 from app.config import settings
 from app.database import init_db
@@ -18,6 +21,8 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 _polling_task = None
+
+STATIC_DIR = Path(__file__).resolve().parent.parent.parent / "frontend" / "out"
 
 
 async def start_polling():
@@ -87,6 +92,31 @@ app.include_router(api_router)
 @app.get("/health")
 async def health():
     return {"status": "ok"}
+
+
+# Serve compiled frontend static files (Next.js output: export)
+if STATIC_DIR.is_dir():
+    app.mount("/_next", StaticFiles(directory=str(STATIC_DIR / "_next")), name="next-assets")
+
+    @app.get("/")
+    async def serve_index():
+        return FileResponse(str(STATIC_DIR / "index.html"))
+
+    @app.get("/{path:path}")
+    async def serve_frontend(path: str):
+        file_path = STATIC_DIR / path
+        if file_path.is_file():
+            return FileResponse(str(file_path))
+
+        html_path = STATIC_DIR / f"{path}/index.html"
+        if html_path.is_file():
+            return FileResponse(str(html_path))
+
+        index = STATIC_DIR / "index.html"
+        if index.exists():
+            return FileResponse(str(index))
+
+        return Response(status_code=404)
 
 
 if __name__ == "__main__":
