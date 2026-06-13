@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 
 _polling_task = None
 
-STATIC_DIR = Path(__file__).resolve().parent.parent.parent / "frontend" / "out"
+STATIC_DIR = Path(__file__).resolve().parent.parent / "frontend" / "out"
 
 
 async def start_polling():
