@@ -2,9 +2,7 @@ version: "3.9"
 
 services:
   backend:
-    build:
-      context: .
-      dockerfile: backend/Dockerfile
+    build: ./backend
     container_name: trud-backend
     restart: unless-stopped
     env_file:
