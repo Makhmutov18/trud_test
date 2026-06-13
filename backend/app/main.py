@@ -10,7 +10,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.config import settings
 from app.database import init_db
 from app.api import api_router
-from app.bot import setup_bot, bot, dp
 
 logging.basicConfig(
     level=logging.INFO,
@@ -22,11 +21,14 @@ _polling_task = None
 
 
 async def start_polling():
+    from app.bot import bot, dp
     if not bot or not dp:
         return
     try:
         logger.info("Starting bot polling...")
         await dp.start_polling(bot)
+    except asyncio.CancelledError:
+        logger.info("Bot polling cancelled")
     except Exception as e:
         logger.error("Polling error: %s", e)
 
@@ -34,13 +36,22 @@ async def start_polling():
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     global _polling_task
-    await init_db()
-    logger.info("Database initialized")
 
-    setup_bot()
-    if bot:
-        _polling_task = asyncio.create_task(start_polling())
-        logger.info("Bot polling started")
+    try:
+        await init_db()
+        logger.info("Database initialized")
+    except Exception as e:
+        logger.error("Database init failed (continuing without DB): %s", e)
+
+    try:
+        from app.bot import setup_bot
+        setup_bot()
+        from app.bot import bot
+        if bot:
+            _polling_task = asyncio.create_task(start_polling())
+            logger.info("Bot polling started")
+    except Exception as e:
+        logger.error("Bot setup failed (continuing without bot): %s", e)
 
     yield
 
