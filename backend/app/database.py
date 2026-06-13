@@ -11,10 +11,7 @@ if DATABASE_URL.startswith("postgres://"):
 elif DATABASE_URL.startswith("postgresql://") and "+asyncpg" not in DATABASE_URL:
     DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://", 1)
 
-if "postgresql" in DATABASE_URL and "sslmode" not in DATABASE_URL:
-    sep = "&" if "?" in DATABASE_URL else "?"
-    DATABASE_URL += f"{sep}sslmode=require"
-
+# asyncpg does NOT support sslmode in URL — use connect_args instead
 connect_args = {}
 if "postgresql" in DATABASE_URL:
     connect_args["ssl"] = "require"

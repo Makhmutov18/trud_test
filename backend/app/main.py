@@ -47,9 +47,11 @@ async def lifespan(app: FastAPI):
         from app.bot import setup_bot
         setup_bot()
         from app.bot import bot
-        if bot:
+        if bot and settings.BOT_POLLING_ENABLED:
             _polling_task = asyncio.create_task(start_polling())
             logger.info("Bot polling started")
+        elif bot and not settings.BOT_POLLING_ENABLED:
+            logger.info("Bot polling disabled via BOT_POLLING_ENABLED=False")
     except Exception as e:
         logger.error("Bot setup failed (continuing without bot): %s", e)
 

@@ -7,6 +7,7 @@ class Settings(BaseSettings):
     SECRET_KEY: str = "change-me-in-production"
     WEBAPP_URL: str = "http://localhost:3000"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7
+    BOT_POLLING_ENABLED: bool = True
 
     model_config = {"env_file": ".env", "env_file_encoding": "utf-8"}
 
