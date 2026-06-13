@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { Croissant, Plus, X } from "lucide-react";
 
 type BakeryItem = {
   id: number;
@@ -49,52 +50,56 @@ export default function BakeryPage() {
 
   return (
     <div>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <h1>Булки и плюшки</h1>
-        <button className="btn btn-primary btn-small" onClick={() => setShowForm(!showForm)}>
-          {showForm ? "Отмена" : "+ Добавить"}
+      <div className="flex items-center justify-between mb-5">
+        <h1 className="text-heading text-coffee uppercase tracking-widest">БУЛКИ И ПЛЮШКИ</h1>
+        <button className="btn flex items-center gap-1.5" onClick={() => setShowForm(!showForm)}>
+          {showForm ? <X size={16} strokeWidth={1.5} /> : <Plus size={16} strokeWidth={1.5} />}
+          {showForm ? "ОТМЕНА" : "ДОБАВИТЬ"}
         </button>
       </div>
 
       {showForm && (
-        <div className="card">
-          <input className="input" placeholder="Название" value={form.name}
-            onChange={(e) => setForm({ ...form, name: e.target.value })} style={{ marginBottom: 8 }} />
-          <input className="input" placeholder="Описание" value={form.description}
-            onChange={(e) => setForm({ ...form, description: e.target.value })} style={{ marginBottom: 8 }} />
-          <input className="input" placeholder="Состав (для аллергиков)" value={form.ingredients}
-            onChange={(e) => setForm({ ...form, ingredients: e.target.value })} style={{ marginBottom: 8 }} />
-          <input className="input" type="number" placeholder="Цена" value={form.price || ""}
-            onChange={(e) => setForm({ ...form, price: +e.target.value })} style={{ marginBottom: 8 }} />
-          <button className="btn btn-primary" onClick={handleCreate} style={{ width: "100%" }}>
-            Сохранить
+        <div className="card mb-4 space-y-3">
+          <input className="input" placeholder="НАЗВАНИЕ" value={form.name}
+            onChange={(e) => setForm({ ...form, name: e.target.value })} />
+          <input className="input" placeholder="ОПИСАНИЕ" value={form.description}
+            onChange={(e) => setForm({ ...form, description: e.target.value })} />
+          <input className="input" placeholder="СОСТАВ (ДЛЯ АЛЛЕРГИКОВ)" value={form.ingredients}
+            onChange={(e) => setForm({ ...form, ingredients: e.target.value })} />
+          <input className="input" type="number" placeholder="ЦЕНА" value={form.price || ""}
+            onChange={(e) => setForm({ ...form, price: +e.target.value })} />
+          <button className="btn btn-primary w-full uppercase tracking-widest" onClick={handleCreate}>
+            СОХРАНИТЬ
           </button>
         </div>
       )}
 
       {items.length === 0 ? (
-        <div className="empty-state"><p>Булок пока нет</p></div>
+        <div className="empty-state uppercase tracking-widest"><p>БУЛОК ПОКА НЕТ</p></div>
       ) : (
-        items.map((item) => (
-          <div key={item.id} className="card">
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "start" }}>
+        <div className="grid-2">
+          {items.map((item) => (
+            <div key={item.id} className="card flex flex-col justify-between">
               <div>
-                <div style={{ fontWeight: 600 }}>{item.name}</div>
-                {item.description && <div style={{ fontSize: 13, color: "var(--text)", marginTop: 4 }}>{item.description}</div>}
-                <div style={{ fontSize: 12, color: "var(--text)", marginTop: 4 }}>
-                  <b>Состав:</b> {item.ingredients}
+                <div className="flex items-center justify-center h-32 rounded-2xl border bg-sand mb-4">
+                  <Croissant size={36} strokeWidth={1.5} className="text-clay" />
                 </div>
-                <div style={{ fontWeight: 600, marginTop: 6 }}>{item.price} ₽</div>
+                <div className="text-caption font-semibold text-coffee uppercase tracking-widest">{item.name}</div>
+                {item.description && <div className="text-caption text-earth mt-1 uppercase tracking-widest">{item.description}</div>}
+                <div className="text-caption text-earth mt-1 uppercase tracking-widest">
+                  <b>СОСТАВ:</b> {item.ingredients}
+                </div>
+                <div className="text-subheading font-bold text-red mt-2">{item.price} ₽</div>
               </div>
               <button
-                className={`btn btn-small ${item.is_available ? "btn-primary" : "btn-secondary"}`}
+                className={`btn mt-4 w-full uppercase tracking-widest ${item.is_available ? "btn-primary" : ""}`}
                 onClick={() => toggleAvailability(item)}
               >
-                {item.is_available ? "Есть" : "Нет"}
+                {item.is_available ? "ЕСТЬ" : "НЕТ"}
               </button>
             </div>
-          </div>
-        ))
+          ))}
+        </div>
       )}
     </div>
   );

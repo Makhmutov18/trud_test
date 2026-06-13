@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { FileText, Plus, X, Trash2 } from "lucide-react";
 
 type Recipe = {
   id: number;
@@ -55,85 +56,87 @@ export default function RecipesPage() {
 
   return (
     <div>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <h1>Рецепты</h1>
-        <button className="btn btn-primary btn-small" onClick={() => setShowForm(!showForm)}>
-          {showForm ? "Отмена" : "+ Добавить"}
+      <div className="flex items-center justify-between mb-5">
+        <h1 className="text-heading text-coffee uppercase tracking-widest">РЕЦЕПТЫ</h1>
+        <button className="btn flex items-center gap-1.5" onClick={() => setShowForm(!showForm)}>
+          {showForm ? <X size={16} strokeWidth={1.5} /> : <Plus size={16} strokeWidth={1.5} />}
+          {showForm ? "ОТМЕНА" : "ДОБАВИТЬ"}
         </button>
       </div>
 
-      <div style={{ display: "flex", gap: 8, marginBottom: 16, overflowX: "auto" }}>
+      <div className="flex gap-2 mb-5 overflow-x-auto scrollbar-none">
         {["all", "pourover", "espresso", "batch", "latte"].map((t) => (
           <button
             key={t}
-            className={`tag ${filter === t ? "badge-success" : ""}`}
+            className={`chip text-caption uppercase tracking-widest ${filter === t ? "chip-active" : ""}`}
             onClick={() => setFilter(t)}
-            style={{ cursor: "pointer", border: "none" }}
           >
-            {t === "all" ? "Все" : t}
+            {t === "all" ? "ВСЕ" : t}
           </button>
         ))}
       </div>
 
       {showForm && (
-        <div className="card">
-          <input className="input" placeholder="Название" value={form.name}
-            onChange={(e) => setForm({ ...form, name: e.target.value })} style={{ marginBottom: 8 }} />
+        <div className="card mb-4 space-y-3">
+          <input className="input" placeholder="НАЗВАНИЕ" value={form.name}
+            onChange={(e) => setForm({ ...form, name: e.target.value })} />
           <select className="input" value={form.type}
-            onChange={(e) => setForm({ ...form, type: e.target.value })} style={{ marginBottom: 8 }}>
-            <option value="pourover">Пуровер</option>
-            <option value="espresso">Эспрессо</option>
-            <option value="batch">Батч</option>
-            <option value="latte">Латте</option>
+            onChange={(e) => setForm({ ...form, type: e.target.value })}>
+            <option value="pourover">ПУРОВЕР</option>
+            <option value="espresso">ЭСПРЕССО</option>
+            <option value="batch">БАТЧ</option>
+            <option value="latte">ЛАТТЕ</option>
           </select>
-          <input className="input" placeholder="Зерно" value={form.bean_variety}
-            onChange={(e) => setForm({ ...form, bean_variety: e.target.value })} style={{ marginBottom: 8 }} />
-          <div className="grid-2" style={{ marginBottom: 8 }}>
-            <input className="input" type="number" placeholder="Доза (г)" value={form.dose}
+          <input className="input" placeholder="ЗЕРНО" value={form.bean_variety}
+            onChange={(e) => setForm({ ...form, bean_variety: e.target.value })} />
+          <div className="grid-2">
+            <input className="input" type="number" placeholder="ДОЗА (Г)" value={form.dose}
               onChange={(e) => setForm({ ...form, dose: +e.target.value })} />
-            <input className="input" type="number" placeholder="Вода (мл)" value={form.total_water}
+            <input className="input" type="number" placeholder="ВОДА (МЛ)" value={form.total_water}
               onChange={(e) => setForm({ ...form, total_water: +e.target.value })} />
           </div>
-          <div className="grid-2" style={{ marginBottom: 8 }}>
-            <input className="input" placeholder="Воронка" value={form.dripper_type || ""}
+          <div className="grid-2">
+            <input className="input" placeholder="ВОРОНКА" value={form.dripper_type || ""}
               onChange={(e) => setForm({ ...form, dripper_type: e.target.value })} />
-            <input className="input" type="number" placeholder="Время (сек)" value={form.brew_time || ""}
+            <input className="input" type="number" placeholder="ВРЕМЯ (СЕК)" value={form.brew_time || ""}
               onChange={(e) => setForm({ ...form, brew_time: +e.target.value })} />
           </div>
-          <button className="btn btn-primary" onClick={handleCreate} style={{ width: "100%" }}>
-            Сохранить
+          <button className="btn btn-primary w-full uppercase tracking-widest" onClick={handleCreate}>
+            СОХРАНИТЬ
           </button>
         </div>
       )}
 
       {filtered.length === 0 ? (
-        <div className="empty-state">
-          <p>Рецептов пока нет</p>
-        </div>
+        <div className="empty-state uppercase tracking-widest"><p>РЕЦЕПТОВ ПОКА НЕТ</p></div>
       ) : (
-        filtered.map((r) => (
-          <div key={r.id} className="card">
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "start" }}>
+        <div className="grid-2">
+          {filtered.map((r) => (
+            <div key={r.id} className="card flex flex-col justify-between">
               <div>
-                <div style={{ fontWeight: 600 }}>{r.name || r.bean_variety}</div>
-                <div style={{ fontSize: 13, color: "var(--text)", marginTop: 4 }}>
-                  {r.type} · {r.bean_variety} · {r.dose}г → {r.total_water}мл
+                <div className="flex items-center gap-2 mb-2">
+                  <FileText size={16} strokeWidth={1.5} className="text-clay" />
+                  <span className="text-caption font-semibold text-coffee uppercase tracking-widest">{r.name || r.bean_variety}</span>
+                </div>
+                <div className="text-caption text-earth uppercase tracking-widest">
+                  {r.type} · {r.bean_variety} · {r.dose}Г → {r.total_water}МЛ
                 </div>
                 {r.dripper_type && (
-                  <div style={{ fontSize: 12, color: "var(--text)", marginTop: 2 }}>
-                    {r.dripper_type} {r.brew_time ? `· ${r.brew_time}с` : ""}
+                  <div className="text-caption text-earth mt-1 uppercase tracking-widest">
+                    {r.dripper_type} {r.brew_time ? `· ${r.brew_time}С` : ""}
                   </div>
                 )}
               </div>
               <button
-                className="btn btn-secondary btn-small"
+                className="btn mt-4 w-full uppercase tracking-widest"
                 onClick={() => handleDelete(r.id)}
               >
-                Удалить
+                <Trash2 size={14} strokeWidth={1.5} />
+                УДАЛИТЬ
               </button>
             </div>
-          </div>
-        ))
+          ))}
+        </div>
       )}
     </div>
   );

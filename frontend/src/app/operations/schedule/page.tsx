@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { Calendar, Plus, X } from "lucide-react";
 
 type Shift = {
   id: number;
@@ -42,37 +43,43 @@ export default function SchedulePage() {
 
   return (
     <div>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <h1>График смен</h1>
-        <button className="btn btn-primary btn-small" onClick={() => setShowForm(!showForm)}>
-          {showForm ? "Отмена" : "+ Добавить"}
+      <div className="flex items-center justify-between mb-5">
+        <h1 className="text-heading text-coffee uppercase tracking-widest">ГРАФИК СМЕН</h1>
+        <button className="btn flex items-center gap-1.5" onClick={() => setShowForm(!showForm)}>
+          {showForm ? <X size={16} strokeWidth={1.5} /> : <Plus size={16} strokeWidth={1.5} />}
+          {showForm ? "ОТМЕНА" : "ДОБАВИТЬ"}
         </button>
       </div>
 
       {showForm && (
-        <div className="card">
+        <div className="card mb-4 space-y-3">
           <input className="input" type="date" value={form.date}
-            onChange={(e) => setForm({ ...form, date: e.target.value })} style={{ marginBottom: 8 }} />
-          <div className="grid-2" style={{ marginBottom: 8 }}>
+            onChange={(e) => setForm({ ...form, date: e.target.value })} />
+          <div className="grid-2">
             <input className="input" type="time" value={form.start_time}
               onChange={(e) => setForm({ ...form, start_time: e.target.value })} />
             <input className="input" type="time" value={form.end_time}
               onChange={(e) => setForm({ ...form, end_time: e.target.value })} />
           </div>
-          <button className="btn btn-primary" onClick={handleCreate} style={{ width: "100%" }}>
-            Добавить смену
+          <button className="btn btn-primary w-full uppercase tracking-widest" onClick={handleCreate}>
+            ДОБАВИТЬ СМЕНУ
           </button>
         </div>
       )}
 
       {Object.entries(grouped).sort().map(([date, dayShifts]) => (
-        <div key={date} style={{ marginBottom: 16 }}>
-          <h2>{new Date(date).toLocaleDateString("ru-RU", { weekday: "long", day: "numeric", month: "long" })}</h2>
+        <div key={date} className="mb-4">
+          <h2 className="text-caption font-bold text-coffee uppercase tracking-widest mb-3">
+            {new Date(date).toLocaleDateString("ru-RU", { weekday: "long", day: "numeric", month: "long" })}
+          </h2>
           {dayShifts.map((s) => (
-            <div key={s.id} className="card">
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <span>{s.start_time.slice(0, 5)} – {s.end_time.slice(0, 5)}</span>
-                <span className={`badge ${s.status === "completed" ? "badge-success" : "badge-warning"}`}>
+            <div key={s.id} className="card mb-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Calendar size={16} strokeWidth={1.5} className="text-clay" />
+                  <span className="text-caption text-coffee">{s.start_time.slice(0, 5)} – {s.end_time.slice(0, 5)}</span>
+                </div>
+                <span className={`chip text-caption ${s.status === "completed" ? "chip-active" : ""}`}>
                   {s.status}
                 </span>
               </div>
@@ -81,7 +88,7 @@ export default function SchedulePage() {
         </div>
       ))}
 
-      {shifts.length === 0 && <div className="empty-state"><p>Смен пока нет</p></div>}
+      {shifts.length === 0 && <div className="empty-state uppercase tracking-widest"><p>СМЕН ПОКА НЕТ</p></div>}
     </div>
   );
 }

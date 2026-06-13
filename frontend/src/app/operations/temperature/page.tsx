@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { Thermometer, Plus, X } from "lucide-react";
 
 type TempLog = {
   id: number;
@@ -36,38 +37,44 @@ export default function TemperaturePage() {
 
   return (
     <div>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <h1>Температура</h1>
-        <button className="btn btn-primary btn-small" onClick={() => setShowForm(!showForm)}>
-          {showForm ? "Отмена" : "+ Записать"}
+      <div className="flex items-center justify-between mb-5">
+        <h1 className="text-heading text-coffee uppercase tracking-widest">ТЕМПЕРАТУРА</h1>
+        <button className="btn flex items-center gap-1.5" onClick={() => setShowForm(!showForm)}>
+          {showForm ? <X size={16} strokeWidth={1.5} /> : <Plus size={16} strokeWidth={1.5} />}
+          {showForm ? "ОТМЕНА" : "ЗАПИСАТЬ"}
         </button>
       </div>
 
       {showForm && (
-        <div className="card">
-          <input className="input" type="number" placeholder="Номер холодильника" value={form.fridge_number}
-            onChange={(e) => setForm({ ...form, fridge_number: +e.target.value })} style={{ marginBottom: 8 }} />
-          <input className="input" type="number" step="0.1" placeholder="Температура (°C)" value={form.temperature}
-            onChange={(e) => setForm({ ...form, temperature: +e.target.value })} style={{ marginBottom: 8 }} />
-          <button className="btn btn-primary" onClick={handleCreate} style={{ width: "100%" }}>
-            Записать
+        <div className="card mb-4 space-y-3">
+          <input className="input" type="number" placeholder="НОМЕР ХОЛОДИЛЬНИКА" value={form.fridge_number}
+            onChange={(e) => setForm({ ...form, fridge_number: +e.target.value })} />
+          <input className="input" type="number" step="0.1" placeholder="ТЕМПЕРАТУРА (°C)" value={form.temperature}
+            onChange={(e) => setForm({ ...form, temperature: +e.target.value })} />
+          <button className="btn btn-primary w-full uppercase tracking-widest" onClick={handleCreate}>
+            ЗАПИСАТЬ
           </button>
         </div>
       )}
 
       {logs.length === 0 ? (
-        <div className="empty-state"><p>Записей пока нет</p></div>
+        <div className="empty-state uppercase tracking-widest"><p>ЗАПИСЕЙ ПОКА НЕТ</p></div>
       ) : (
         logs.slice(0, 30).map((l) => (
-          <div key={l.id} className="card" style={{ borderLeft: l.is_alarm ? "3px solid var(--error)" : undefined }}>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <span>Холодильник #{l.fridge_number}</span>
-              <span style={{ fontWeight: 600 }}>{l.temperature}°C</span>
+          <div key={l.id} className="card mb-3" style={{ borderLeft: l.is_alarm ? "3px solid var(--red)" : undefined }}>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Thermometer size={16} strokeWidth={1.5} className={l.is_alarm ? "text-red" : "text-clay"} />
+                <span className="text-caption text-coffee">ХОЛОДИЛЬНИК #{l.fridge_number}</span>
+              </div>
+              <span className={`text-caption font-semibold ${l.is_alarm ? "text-red" : "text-coffee"}`}>
+                {l.temperature}°C
+              </span>
             </div>
-            <div style={{ fontSize: 12, color: "var(--text)", marginTop: 4 }}>
+            <div className="text-caption text-earth mt-1 uppercase tracking-widest">
               {new Date(l.recorded_at).toLocaleString("ru-RU")}
             </div>
-            {l.is_alarm && <span className="badge badge-error" style={{ marginTop: 4 }}>Вне нормы!</span>}
+            {l.is_alarm && <span className="chip chip-active text-caption mt-2 inline-block">ВНЕ НОРМЫ!</span>}
           </div>
         ))
       )}

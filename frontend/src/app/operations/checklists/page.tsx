@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { ClipboardCheck, Plus, X, CheckSquare, Square } from "lucide-react";
 
 type Checklist = {
   id: number;
@@ -49,68 +50,73 @@ export default function ChecklistsPage() {
 
   return (
     <div>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <h1>Чек-листы</h1>
-        <button className="btn btn-primary btn-small" onClick={() => setShowForm(!showForm)}>
-          {showForm ? "Отмена" : "+ Создать"}
+      <div className="flex items-center justify-between mb-5">
+        <h1 className="text-heading text-coffee uppercase tracking-widest">ЧЕК-ЛИСТЫ</h1>
+        <button className="btn flex items-center gap-1.5" onClick={() => setShowForm(!showForm)}>
+          {showForm ? <X size={16} strokeWidth={1.5} /> : <Plus size={16} strokeWidth={1.5} />}
+          {showForm ? "ОТМЕНА" : "СОЗДАТЬ"}
         </button>
       </div>
 
       {showForm && (
-        <div className="card">
-          <input className="input" placeholder="Название" value={form.name}
-            onChange={(e) => setForm({ ...form, name: e.target.value })} style={{ marginBottom: 8 }} />
+        <div className="card mb-4 space-y-3">
+          <input className="input" placeholder="НАЗВАНИЕ" value={form.name}
+            onChange={(e) => setForm({ ...form, name: e.target.value })} />
           <select className="input" value={form.type}
-            onChange={(e) => setForm({ ...form, type: e.target.value })} style={{ marginBottom: 8 }}>
-            <option value="opening">Открытие смены</option>
-            <option value="closing">Закрытие смены</option>
-            <option value="cleaning">Генуборка</option>
-            <option value="toilet">Туалет</option>
+            onChange={(e) => setForm({ ...form, type: e.target.value })}>
+            <option value="opening">ОТКРЫТИЕ СМЕНЫ</option>
+            <option value="closing">ЗАКРЫТИЕ СМЕНЫ</option>
+            <option value="cleaning">ГЕНУБОРКА</option>
+            <option value="toilet">ТУАЛЕТ</option>
           </select>
           {form.items.map((item, idx) => (
-            <div key={idx} style={{ display: "flex", gap: 8, marginBottom: 8 }}>
-              <input className="input" placeholder="Пункт" value={item.text}
+            <div key={idx} className="flex gap-2">
+              <input className="input flex-1" placeholder="ПУНКТ" value={item.text}
                 onChange={(e) => {
                   const newItems = [...form.items];
                   newItems[idx] = { ...newItems[idx], text: e.target.value };
                   setForm({ ...form, items: newItems });
                 }} />
               {idx === form.items.length - 1 && (
-                <button className="btn btn-secondary btn-small"
+                <button className="btn"
                   onClick={() => setForm({ ...form, items: [...form.items, { text: "", done: false }] })}>
-                  +
+                  <Plus size={16} strokeWidth={1.5} />
                 </button>
               )}
             </div>
           ))}
-          <button className="btn btn-primary" onClick={handleCreate} style={{ width: "100%" }}>
-            Создать
+          <button className="btn btn-primary w-full uppercase tracking-widest" onClick={handleCreate}>
+            СОЗДАТЬ
           </button>
         </div>
       )}
 
       {checklists.length === 0 ? (
-        <div className="empty-state"><p>Чек-листов пока нет</p></div>
+        <div className="empty-state uppercase tracking-widest"><p>ЧЕК-ЛИСТОВ ПОКА НЕТ</p></div>
       ) : (
         checklists.map((cl) => (
-          <div key={cl.id} className="card">
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <div style={{ fontWeight: 600 }}>{cl.name}</div>
-              {cl.completed_at && <span className="badge badge-success">Выполнено</span>}
+          <div key={cl.id} className="card mb-4">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <ClipboardCheck size={16} strokeWidth={1.5} className="text-clay" />
+                <span className="text-caption font-semibold text-coffee uppercase tracking-widest">{cl.name}</span>
+              </div>
+              {cl.completed_at && <span className="chip chip-active text-caption">ВЫПОЛНЕНО</span>}
             </div>
-            <div style={{ fontSize: 12, color: "var(--text)", marginTop: 2 }}>{cl.type}</div>
-            <div style={{ marginTop: 12 }}>
+            <div className="text-caption text-earth uppercase tracking-widest mb-3">{cl.type}</div>
+            <div>
               {cl.items.map((item, idx) => (
                 <div
                   key={idx}
                   onClick={() => toggleItem(cl, idx)}
-                  style={{
-                    display: "flex", alignItems: "center", gap: 8, padding: "8px 0",
-                    cursor: "pointer", borderBottom: idx < cl.items.length - 1 ? "1px solid var(--border)" : undefined,
-                  }}
+                  className="flex items-center gap-3 py-3 border-b border-border last:border-0 cursor-pointer"
                 >
-                  <span style={{ fontSize: 18 }}>{item.done ? "☑️" : "☐"}</span>
-                  <span style={{ textDecoration: item.done ? "line-through" : undefined, color: item.done ? "var(--text)" : undefined }}>
+                  {item.done ? (
+                    <CheckSquare size={18} strokeWidth={1.5} className="text-olive shrink-0" />
+                  ) : (
+                    <Square size={18} strokeWidth={1.5} className="text-clay shrink-0" />
+                  )}
+                  <span className={`text-caption ${item.done ? "text-earth line-through" : "text-coffee"}`}>
                     {item.text}
                   </span>
                 </div>
