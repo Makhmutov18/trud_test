@@ -21,7 +21,10 @@ const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 export default function BrewLogPage() {
   const [logs, setLogs] = useState<BrewLog[]>([]);
   const [showForm, setShowForm] = useState(false);
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<{
+    coffee_beans: string; method: string; weight_in: number; weight_out: number;
+    brew_time: number; temperature: number | null; tds: number | null; notes: string;
+  }>({
     coffee_beans: "", method: "V60", weight_in: 15, weight_out: 250,
     brew_time: 180, temperature: 92, tds: 1.35, notes: "",
   });
